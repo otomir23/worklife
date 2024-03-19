@@ -1,6 +1,28 @@
 import { sveltekit } from "@sveltejs/kit/vite"
+import { SvelteKitPWA } from "@vite-pwa/sveltekit"
 import { defineConfig } from "vite"
 
 export default defineConfig({
-    plugins: [sveltekit()],
+    plugins: [
+        sveltekit(),
+        SvelteKitPWA({
+            srcDir: "./src",
+            strategies: "generateSW",
+            devOptions: {
+                enabled: true,
+            },
+            pwaAssets: {
+                config: true,
+            },
+            manifest: {
+                theme_color: "#000000",
+                lang: "ru",
+            },
+        }),
+    ],
+    build: {
+        rollupOptions: {
+            external: ["sharp"],
+        },
+    },
 })
