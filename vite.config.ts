@@ -8,9 +8,6 @@ export default defineConfig({
         SvelteKitPWA({
             srcDir: "./src",
             strategies: "generateSW",
-            devOptions: {
-                enabled: true,
-            },
             pwaAssets: {
                 config: true,
             },
