@@ -70,6 +70,9 @@ devDependencies:
   svelte-check:
     specifier: ^3.6.0
     version: 3.6.7(@babel/core@7.24.0)(postcss@8.4.35)(svelte@4.2.12)
+  svelte-remix:
+    specifier: ^1.0.3
+    version: 1.0.3(svelte@4.2.12)
   tailwindcss:
     specifier: ^3.4.1
     version: 3.4.1
@@ -4936,6 +4939,14 @@ packages:
       strip-indent: 3.0.0
       svelte: 4.2.12
       typescript: 5.4.2
+    dev: true
+
+  /svelte-remix@1.0.3(svelte@4.2.12):
+    resolution: {integrity: sha512-j8jNPWcg3uHWG/F7nbr8iCerLb31DWmcpnjwgnHM0UOHhLtxPsWF+dJDMNi0L3PReH1H/BPVPNxNAHqmB75cig==}
+    peerDependencies:
+      svelte: ^3.54.0 || ^4.0.0 || ^5.0.0
+    dependencies:
+      svelte: 4.2.12
     dev: true
 
   /svelte@4.2.12:
