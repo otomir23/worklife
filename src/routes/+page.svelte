@@ -61,7 +61,7 @@
     {:else if $habits.length === 0}
         <div class="flex flex-col gap-2">
             <Icon icon={Forbid2LineSystem} />
-            <p class="select-none">
+            <p>
                 Вы пока не создали ни одной привычки.<br />
                 Самое время это исправить.<br />
             </p>
@@ -87,7 +87,7 @@
     {:else if relevantHabits.length === 0}
         <div class="flex flex-col gap-2">
             <Icon icon={ZzzFillHealthMedical} />
-            <p class="select-none">
+            <p>
                 Все ваши привычки выполнены.<br />
                 Можете отдохнуть.<br />
             </p>
@@ -137,7 +137,7 @@
 >
     <button
         class="text-sm flex items-center gap-1 focus:outline-none hover:underline
-        focus-visible:underline select-none font-medium"
+        focus-visible:underline font-medium"
         type="button"
         on:click={() => {
             habitTemplatesModal.open()
@@ -190,7 +190,7 @@
 <Modal title="Каталог привычек" bind:this={habitTemplatesModal}>
     {#each templates as { category, habitTemplates } (category)}
         <div class="flex flex-col gap-2">
-            <h3 class="flex gap-1 font-bold items-center select-none">
+            <h3 class="flex gap-1 font-bold items-center">
                 <Icon icon={getCategoryIcon(category)} size={16} />
                 {category}
             </h3>

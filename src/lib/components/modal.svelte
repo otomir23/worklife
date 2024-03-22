@@ -22,11 +22,11 @@
 
 <dialog
     bind:this={dialog}
-    class="w-full max-w-screen-sm sm:max-w-lg rounded-lg max-sm:mb-0 max-sm:rounded-b-none shadow-2xl"
+    class="w-full max-w-screen-sm sm:max-w-lg rounded-lg max-sm:mb-0 max-sm:rounded-b-none shadow-2xl select-none"
 >
     <form class="flex flex-col gap-4 p-6" method="dialog" on:submit={formSubmitHandler}>
         <aside class="flex items-center justify-between">
-            <h2 class="font-bold text-xl select-none">
+            <h2 class="font-bold text-xl">
                 {title}
             </h2>
             <Button

@@ -4,7 +4,7 @@
 
     const button = cva({
         base: `rounded-md focus:outline-none focus:ring font-medium text-base flex gap-2 items-center \
-        transition select-none`,
+        transition`,
         variants: {
             intent: {
                 primary: "bg-neutral-950 text-white ring-neutral-300",

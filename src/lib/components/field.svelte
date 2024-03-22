@@ -6,6 +6,6 @@
 </script>
 
 <label class="flex flex-col gap-2 relative {className}">
-    <span class="font-bold text-sm select-none text-nowrap">{label}</span>
+    <span class="font-bold text-sm text-nowrap">{label}</span>
     <slot />
 </label>

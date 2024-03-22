@@ -14,7 +14,7 @@
         type="button"
         on:click={() => (choice = false)}
         class="transition text-neutral-700 group-data-[choice=false]:text-black rounded flex-1
-        focus-visible:ring ring-neutral-300 focus:outline-none h-full select-none"
+        focus-visible:ring ring-neutral-300 focus:outline-none h-full"
     >
         <slot name="first" />
     </button>
@@ -22,7 +22,7 @@
         type="button"
         on:click={() => (choice = true)}
         class="transition text-neutral-700 group-data-[choice=true]:text-black rounded flex-1
-        focus-visible:ring ring-neutral-300 focus:outline-none h-full select-none"
+        focus-visible:ring ring-neutral-300 focus:outline-none h-full"
     >
         <slot name="second" />
     </button>
