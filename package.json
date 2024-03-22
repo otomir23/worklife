@@ -41,6 +41,8 @@
     "type": "module",
     "dependencies": {
         "cva": "1.0.0-beta.1",
-        "tailwind-merge": "^2.2.2"
+        "date-fns": "^3.6.0",
+        "tailwind-merge": "^2.2.2",
+        "zod": "^3.22.4"
     }
 }
