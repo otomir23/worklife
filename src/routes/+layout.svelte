@@ -46,4 +46,6 @@
     {/each}
 </svelte:head>
 
-<slot />
+<main class="selection:bg-neutral-950 selection:text-neutral-100">
+    <slot />
+</main>
