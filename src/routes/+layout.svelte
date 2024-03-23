@@ -3,6 +3,7 @@
     import { pwaInfo } from "virtual:pwa-info"
     import { pwaAssetsHead } from "virtual:pwa-assets/head"
     import { onMount } from "svelte"
+    import Toaster from "$lib/components/toaster.svelte"
 
     onMount(async () => {
         if (pwaInfo) {
@@ -47,5 +48,6 @@
 </svelte:head>
 
 <main class="selection:bg-neutral-950 selection:text-neutral-100 select-none">
+    <Toaster />
     <slot />
 </main>

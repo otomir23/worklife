@@ -28,6 +28,7 @@
     import { comparePeriods, getPeriodName, habitPeriodSchema } from "$lib/data/periods"
     import { experiencePerLevel, game, purchaseItem, storeItems, syncGame } from "$lib/data/game"
     import { format } from "date-fns"
+    import { toast } from "$lib/data/toaster"
 
     let taskHasAmount: boolean
 
@@ -41,7 +42,7 @@
         const res = importData(file)
 
         if (!res) {
-            alert("Загруженный файл не является файлом привычек.")
+            toast("Загруженный файл не является файлом привычек.")
         }
 
         input.value = ""
@@ -327,7 +328,7 @@
                 type="button"
                 on:click={() => {
                     const res = purchaseItem(item)
-                    if (!res) alert("Недостаточно средств")
+                    if (!res) toast("Недостаточно средств")
                     else storeModal.close()
                 }}
             >
