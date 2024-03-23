@@ -22,4 +22,7 @@ export default defineConfig({
             external: ["sharp"],
         },
     },
+    ssr: {
+        noExternal: [/^svelte-chartjs/],
+    },
 })

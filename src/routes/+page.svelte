@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { createHabit, importData, habits, syncHabits } from "$lib/data/habits"
+    import { createHabit, importData, habits, syncHabits, type Habit } from "$lib/data/habits"
     import Button from "$lib/components/button.svelte"
     import Field from "$lib/components/field.svelte"
     import Input from "$lib/components/input.svelte"
@@ -7,6 +7,7 @@
     import Tabs from "$lib/components/tabs.svelte"
     import Icon from "$lib/components/icon.svelte"
     import Modal from "$lib/components/modal.svelte"
+    import BarChart from "$lib/components/bar-chart.svelte"
     import HabitCard from "$lib/components/habit.svelte"
     import { onMount } from "svelte"
     import {
@@ -25,6 +26,7 @@
     import { getCategoryIcon } from "$lib/data/categories"
     import { comparePeriods, getPeriodName, habitPeriodSchema } from "$lib/data/periods"
     import { experiencePerLevel, game, purchaseItem, storeItems, syncGame } from "$lib/data/game"
+    import { format } from "date-fns"
 
     let taskHasAmount: boolean
 
@@ -44,6 +46,11 @@
         input.value = ""
     }
 
+    function habitStatSelectHandler(e: Event) {
+        selectedHabitForStats =
+            $habits?.find((h) => h.id === +(e.target as HTMLSelectElement).value) ?? null
+    }
+
     let createHabitModal: Modal
     let habitTemplatesModal: Modal
     let storeModal: Modal
@@ -53,6 +60,9 @@
             ?.filter((h) => !h.actions.find((a) => a.date > h.startedDate) && !h.archivedDate)
             .sort((a, b) => comparePeriods(a.period, b.period)) ?? null
     $: doneCount = ($habits?.length ?? 0) - (relevantHabits?.length ?? 0)
+
+    $: habitsWithAmount = $habits?.filter((h) => !!h.targetValue) ?? []
+    let selectedHabitForStats: Habit | null = null
 
     onMount(() => {
         syncGame()
@@ -165,6 +175,30 @@
             </span>
         {/if}
     {/if}
+    <div class="relative">
+        <Select
+            containerClass="absolute inset-x-2 top-2 w-auto"
+            size="small"
+            on:change={habitStatSelectHandler}
+        >
+            <option value="">-- Выберите привычку --</option>
+            {#each habitsWithAmount as habit}
+                <option value={habit.id}>{habit.title}</option>
+            {/each}
+        </Select>
+        <BarChart
+            data={{
+                labels: selectedHabitForStats?.actions.map((a) => format(a.date, "dd.MM.yyyy")),
+                datasets: [
+                    {
+                        label: `Выполнено (${selectedHabitForStats?.unit ?? "ед"})`,
+                        data: selectedHabitForStats?.actions.map((a) => a.value ?? 0) ?? [],
+                    },
+                ],
+            }}
+            line={selectedHabitForStats?.targetValue ?? 0}
+        />
+    </div>
     <button
         class="text-sm flex items-center gap-1 focus:outline-none hover:underline
         focus-visible:underline font-medium"
