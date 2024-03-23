@@ -4,6 +4,7 @@
     import { Chart, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale } from "chart.js"
     import annotationPlugin from "chartjs-plugin-annotation"
     import type { Plugin } from "chart.js"
+    import { onMount } from "svelte"
 
     Chart.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale, annotationPlugin)
 
@@ -25,11 +26,19 @@
         },
     }
 
+    let chart: Chart<"bar", (number | [number, number])[], unknown>
+    onMount(() => {
+        document.fonts.ready.then(() => {
+            chart.update()
+        })
+    })
+
     export let line
     export let data
 </script>
 
 <Bar
+    bind:chart
     {data}
     options={{
         responsive: true,
