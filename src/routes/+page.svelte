@@ -11,15 +11,20 @@
     import { onMount } from "svelte"
     import {
         AddBoxFillSystem,
+        CopperCoinFillFinance,
         FileList3FillDocument,
         FireFillWeather,
         Forbid2LineSystem,
+        PauseCircleFillMedia,
+        SpeedFillMedia,
+        Store2FillBuildings,
         UploadCloud2FillSystem,
         ZzzFillHealthMedical,
     } from "svelte-remix"
     import { templates } from "$lib/data/templates"
     import { getCategoryIcon } from "$lib/data/categories"
     import { comparePeriods, getPeriodName, habitPeriodSchema } from "$lib/data/periods"
+    import { experiencePerLevel, game, purchaseItem, storeItems, syncGame } from "$lib/data/game"
 
     let taskHasAmount: boolean
 
@@ -41,6 +46,7 @@
 
     let createHabitModal: Modal
     let habitTemplatesModal: Modal
+    let storeModal: Modal
 
     $: relevantHabits =
         $habits
@@ -49,11 +55,51 @@
     $: doneCount = ($habits?.length ?? 0) - (relevantHabits?.length ?? 0)
 
     onMount(() => {
+        syncGame()
         syncHabits()
     })
 </script>
 
 <main class="flex flex-col gap-4 w-full max-w-2xl mx-auto p-4">
+    {#if $game === null}
+        <div class="bg-neutral-200 animate-pulse h-8 w-full rounded-md" />
+    {:else}
+        <aside class="w-full flex flex-col gap-2">
+            <div class="w-full rounded-full bg-neutral-100 h-6 overflow-hidden relative">
+                <div class="absolute text-white mix-blend-difference font-bold left-2 top-0">
+                    {$game.level}
+                </div>
+                <div
+                    class="bg-neutral-950 transition-all h-full rounded"
+                    style="width: {($game.experience / experiencePerLevel) * 100}%"
+                />
+                <div class="absolute text-white mix-blend-difference font-bold right-2 top-0">
+                    {$game.level + 1}
+                </div>
+            </div>
+            <div class="flex justify-between gap-2 text-xs w-full items-center">
+                <div>
+                    <b>Опыт:</b>
+                    {$game.experience}
+                    <span class="text-neutral-500"> / {experiencePerLevel} для повышения</span>
+                </div>
+                <span
+                    class="font-bold mt-1 flex gap-0.5 text-xs items-center transition-colors
+                    {$game.streak > 0 ? 'text-red-600' : 'text-neutral-700'}"
+                >
+                    {#if $game.frozenUntil}
+                        <Icon icon={PauseCircleFillMedia} size={12} />
+                    {/if}
+                    {#if $game.boostUntil}
+                        <Icon icon={SpeedFillMedia} size={12} />
+                    {/if}
+                    <Icon icon={FireFillWeather} size={12} />
+                    {$game.streak} подряд
+                </span>
+            </div>
+        </aside>
+    {/if}
+
     {#if $habits === null || relevantHabits === null}
         {#each [...Array(3)] as _, i (i)}
             <div class="bg-neutral-200 animate-pulse h-20 w-full rounded-md" />
@@ -119,6 +165,17 @@
             </span>
         {/if}
     {/if}
+    <button
+        class="text-sm flex items-center gap-1 focus:outline-none hover:underline
+        focus-visible:underline font-medium"
+        type="button"
+        on:click={() => {
+            storeModal.open()
+        }}
+    >
+        <Icon icon={Store2FillBuildings} size={16} />
+        Магазин -->
+    </button>
 </main>
 
 <Modal
@@ -215,6 +272,38 @@
                     </span>
                 </Button>
             {/each}
+        </div>
+    {/each}
+</Modal>
+
+<Modal title="Магазин" bind:this={storeModal}>
+    <div class="flex gap-1 items-center">
+        <span class="font-semibold">Баланс:</span>
+        {#if $game === null}
+            <div class="bg-neutral-200 animate-pulse h-4 w-12 rounded" />
+        {:else}
+            <Icon icon={CopperCoinFillFinance} size={16} />
+            <span>{$game.money}</span>
+        {/if}
+    </div>
+    {#each storeItems as item}
+        <div class="border border-neutral-200 flex flex-col gap-2 p-4 rounded-lg">
+            <Icon icon={item.icon} />
+            <h3 class="font-bold">{item.name}</h3>
+            <p>{item.description}</p>
+            <Button
+                size="small"
+                class="w-full gap-1"
+                type="button"
+                on:click={() => {
+                    const res = purchaseItem(item)
+                    if (!res) alert("Недостаточно средств")
+                    else storeModal.close()
+                }}
+            >
+                Купить за {item.price}
+                <Icon icon={CopperCoinFillFinance} size={16} />
+            </Button>
         </div>
     {/each}
 </Modal>

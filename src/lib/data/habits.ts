@@ -1,6 +1,7 @@
 import { z } from "zod"
 import { getPeriodBeginning, getPeriodEnd, habitPeriodSchema } from "$lib/data/periods"
 import { writable } from "svelte/store"
+import { completeHabit, resetStreak } from "$lib/data/game"
 
 const habitsStorageKey = "habits"
 export const habits = writable<Habit[] | null>(null)
@@ -50,11 +51,14 @@ export function getHabits(): Habit[] {
                 return h
 
             const currentAction = h.actions.find((a) => a.date > h.startedDate)
+
+            // If there is no action after the period start, then the habit was not done, so we reset the streak
+            if (!currentAction) resetStreak()
+
             return {
                 ...h,
                 currentValue: h.targetValue ? 0 : undefined,
                 startedDate: getPeriodBeginning(h.period, today),
-                // If there is no action after the period start, then the habit was not done, so we reset the streak
                 streak: currentAction ? h.streak : 0,
             }
         })
@@ -114,6 +118,8 @@ export function updateHabitProgress(id: number, progress: number) {
                 currentValue: h.targetValue ? progress : undefined,
             }
         }
+
+        completeHabit()
         return {
             ...h,
             streak: h.streak + 1,
