@@ -1,6 +1,7 @@
 <script lang="ts">
     import { createHabit, importData, habits, syncHabits, type Habit } from "$lib/data/habits"
     import Button from "$lib/components/button.svelte"
+    import LinkButton from "$lib/components/link-button.svelte"
     import Field from "$lib/components/field.svelte"
     import Input from "$lib/components/input.svelte"
     import Select from "$lib/components/select.svelte"
@@ -199,17 +200,14 @@
             line={selectedHabitForStats?.targetValue ?? 0}
         />
     </div>
-    <button
-        class="text-sm flex items-center gap-1 focus:outline-none hover:underline
-        focus-visible:underline font-medium"
-        type="button"
+    <LinkButton
+        icon={Store2FillBuildings}
         on:click={() => {
             storeModal.open()
         }}
     >
-        <Icon icon={Store2FillBuildings} size={16} />
-        Магазин -->
-    </button>
+        Магазин
+    </LinkButton>
 </main>
 
 <Modal
@@ -226,18 +224,16 @@
         })
     }}
 >
-    <button
-        class="text-sm flex items-center gap-1 focus:outline-none hover:underline
-        focus-visible:underline font-medium"
+    <LinkButton
+        icon={FileList3FillDocument}
         type="button"
         on:click={() => {
             habitTemplatesModal.open()
             createHabitModal.close()
         }}
     >
-        <Icon icon={FileList3FillDocument} size={16} />
-        Каталог привычек -->
-    </button>
+        Каталог привычек
+    </LinkButton>
     <Field label="Привычка">
         <Input name="goal" placeholder="напр. Сделать зарядку" required />
     </Field>
