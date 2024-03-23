@@ -5,16 +5,28 @@
     import Icon from "$lib/components/icon.svelte"
 
     const select = cva({
-        base: `rounded-md bg-neutral-100 focus:outline-none focus:ring ring-neutral-200 px-3 py-2 transition \
+        base: `rounded-md bg-neutral-100 focus:outline-none focus:ring ring-neutral-200 transition \
         appearance-none w-full cursor-pointer`,
+        variants: {
+            size: {
+                small: "px-2 py-1",
+                medium: "py-2 px-3",
+            },
+        },
     })
 
-    type $$Props = HTMLSelectAttributes & VariantProps<typeof select>
-    const { class: className, ...rest } = $$restProps
+    const container = cva({
+        base: `relative w-full`,
+    })
+
+    type $$Props = Omit<HTMLSelectAttributes, "size"> &
+        VariantProps<typeof select> & { containerClass?: string }
+    const { class: className, containerClass, ...rest } = $$restProps
+    export let size: $$Props["size"] = "medium"
 </script>
 
-<div class="relative w-full">
-    <select class={select({ className })} {...rest}>
+<div class={container({ className: containerClass })}>
+    <select class={select({ className, size })} {...rest} on:change>
         <slot />
     </select>
     <Icon
