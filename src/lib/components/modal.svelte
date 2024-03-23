@@ -22,7 +22,9 @@
 
 <dialog
     bind:this={dialog}
-    class="w-full max-w-screen-sm sm:max-w-lg rounded-lg max-sm:mb-0 max-sm:rounded-b-none shadow-2xl select-none"
+    class="w-full max-w-screen-sm sm:max-w-lg rounded-lg max-sm:mb-0 max-sm:rounded-b-none shadow-2xl block fixed
+    select-none opacity-0 open:opacity-100 transition pointer-events-none open:pointer-events-auto translate-y-12
+    open:translate-y-0"
 >
     <form class="flex flex-col gap-4 p-6" method="dialog" on:submit={formSubmitHandler}>
         <aside class="flex items-center justify-between">
