@@ -44,7 +44,7 @@ export function getHabits(): Habit[] {
         const habits = z.array(habitSchema).parse(rawData)
 
         // Invalidate habits that are past their period end
-        return habits.map((h) => {
+        const newHabits = habits.map((h) => {
             const today = new Date()
             if (today < getPeriodEnd(h.period, h.startedDate) || h.archivedDate !== undefined)
                 // Habit is still valid
@@ -62,6 +62,8 @@ export function getHabits(): Habit[] {
                 streak: shouldReset ? 0 : h.streak,
             }
         })
+        saveHabits(newHabits)
+        return newHabits
     } catch (e) {
         console.error(e)
         return []
