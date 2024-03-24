@@ -47,7 +47,10 @@
     {/each}
 </svelte:head>
 
-<main class="selection:bg-neutral-950 selection:text-neutral-100 select-none">
+<main
+    class="selection:bg-neutral-950 selection:text-neutral-100 select-none flex flex-col gap-4 p-4
+    w-full max-w-2xl mx-auto"
+>
     <Toaster />
     <slot />
 </main>

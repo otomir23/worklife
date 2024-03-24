@@ -72,144 +72,142 @@
     })
 </script>
 
-<main class="flex flex-col gap-4 w-full max-w-2xl mx-auto p-4">
-    {#if $game === null}
-        <div class="bg-neutral-200 animate-pulse h-8 w-full rounded-md" />
-    {:else}
-        <aside class="w-full flex flex-col gap-2">
-            <div class="w-full rounded-full bg-neutral-100 h-6 overflow-hidden relative">
-                <div class="absolute text-white mix-blend-difference font-bold left-2 top-0">
-                    {$game.level}
-                </div>
-                <div
-                    class="bg-neutral-950 transition-all h-full rounded"
-                    style="width: {($game.experience / experiencePerLevel) * 100}%"
-                />
-                <div class="absolute text-white mix-blend-difference font-bold right-2 top-0">
-                    {$game.level + 1}
-                </div>
+{#if $game === null}
+    <div class="bg-neutral-200 animate-pulse h-8 w-full rounded-md" />
+{:else}
+    <aside class="w-full flex flex-col gap-2">
+        <div class="w-full rounded-full bg-neutral-100 h-6 overflow-hidden relative">
+            <div class="absolute text-white mix-blend-difference font-bold left-2 top-0">
+                {$game.level}
             </div>
-            <div class="flex justify-between gap-2 text-xs w-full items-center">
-                <div>
-                    <b>Опыт:</b>
-                    {$game.experience}
-                    <span class="text-neutral-500"> / {experiencePerLevel} для повышения</span>
-                </div>
-                <span
-                    class="font-bold mt-1 flex gap-0.5 text-xs items-center transition-colors
-                    {$game.streak > 0 ? 'text-red-600' : 'text-neutral-700'}"
-                >
-                    {#if $game.frozenUntil}
-                        <Icon icon={PauseCircleFillMedia} size={12} />
-                    {/if}
-                    {#if $game.boostUntil}
-                        <Icon icon={SpeedFillMedia} size={12} />
-                    {/if}
-                    <Icon icon={FireFillWeather} size={12} />
-                    {$game.streak} подряд
-                </span>
-            </div>
-        </aside>
-    {/if}
-
-    {#if $habits === null || relevantHabits === null}
-        {#each [...Array(3)] as _, i (i)}
-            <div class="bg-neutral-200 animate-pulse h-20 w-full rounded-md" />
-        {/each}
-    {:else if $habits.length === 0}
-        <div class="flex flex-col gap-2">
-            <Icon icon={Forbid2LineSystem} />
-            <p>
-                Вы пока не создали ни одной привычки.<br />
-                Самое время это исправить.<br />
-            </p>
-            <div class="flex gap-2">
-                <Button on:click={() => createHabitModal.open()} size="small">
-                    <Icon icon={AddBoxFillSystem} />
-                    Создать
-                </Button>
-
-                <input
-                    type="file"
-                    class="sr-only"
-                    bind:this={uploadField}
-                    on:change={uploadHandler}
-                    accept="application/json"
-                />
-                <Button on:click={() => uploadField.showPicker()} intent="secondary" size="small">
-                    <Icon icon={UploadCloud2FillSystem} />
-                    Импортировать
-                </Button>
+            <div
+                class="bg-neutral-950 transition-all h-full rounded"
+                style="width: {($game.experience / experiencePerLevel) * 100}%"
+            />
+            <div class="absolute text-white mix-blend-difference font-bold right-2 top-0">
+                {$game.level + 1}
             </div>
         </div>
-    {:else if relevantHabits.length === 0}
-        <div class="flex flex-col gap-2">
-            <Icon icon={ZzzFillHealthMedical} />
-            <p>
-                Все ваши привычки выполнены.<br />
-                Можете отдохнуть.<br />
-            </p>
-            <Button
-                on:click={() => createHabitModal.open()}
-                intent="secondary"
-                size="small"
-                class="w-fit"
+        <div class="flex justify-between gap-2 text-xs w-full items-center">
+            <div>
+                <b>Опыт:</b>
+                {$game.experience}
+                <span class="text-neutral-500"> / {experiencePerLevel} для повышения</span>
+            </div>
+            <span
+                class="font-bold mt-1 flex gap-0.5 text-xs items-center transition-colors
+                    {$game.streak > 0 ? 'text-red-600' : 'text-neutral-700'}"
             >
+                {#if $game.frozenUntil}
+                    <Icon icon={PauseCircleFillMedia} size={12} />
+                {/if}
+                {#if $game.boostUntil}
+                    <Icon icon={SpeedFillMedia} size={12} />
+                {/if}
+                <Icon icon={FireFillWeather} size={12} />
+                {$game.streak} подряд
+            </span>
+        </div>
+    </aside>
+{/if}
+
+{#if $habits === null || relevantHabits === null}
+    {#each [...Array(3)] as _, i (i)}
+        <div class="bg-neutral-200 animate-pulse h-20 w-full rounded-md" />
+    {/each}
+{:else if $habits.length === 0}
+    <div class="flex flex-col gap-2">
+        <Icon icon={Forbid2LineSystem} />
+        <p>
+            Вы пока не создали ни одной привычки.<br />
+            Самое время это исправить.<br />
+        </p>
+        <div class="flex gap-2">
+            <Button on:click={() => createHabitModal.open()} size="small">
                 <Icon icon={AddBoxFillSystem} />
-                Добавить ещё
+                Создать
+            </Button>
+
+            <input
+                type="file"
+                class="sr-only"
+                bind:this={uploadField}
+                on:change={uploadHandler}
+                accept="application/json"
+            />
+            <Button on:click={() => uploadField.showPicker()} intent="secondary" size="small">
+                <Icon icon={UploadCloud2FillSystem} />
+                Импортировать
             </Button>
         </div>
-    {:else}
+    </div>
+{:else if relevantHabits.length === 0}
+    <div class="flex flex-col gap-2">
+        <Icon icon={ZzzFillHealthMedical} />
+        <p>
+            Все ваши привычки выполнены.<br />
+            Можете отдохнуть.<br />
+        </p>
         <Button
             on:click={() => createHabitModal.open()}
-            class="w-full sticky top-4 inset-x-0 z-10"
             intent="secondary"
+            size="small"
+            class="w-fit"
         >
             <Icon icon={AddBoxFillSystem} />
             Добавить ещё
         </Button>
-        {#each relevantHabits as habit (habit.id)}
-            <HabitCard {habit} />
-        {/each}
-        {#if doneCount > 0}
-            <span class="text-xs text-neutral-700 w-full">
-                + {doneCount} выполненных привычек
-            </span>
-        {/if}
-    {/if}
-    <div class="relative">
-        <Select
-            containerClass="absolute inset-x-2 top-2 w-auto"
-            size="small"
-            on:change={habitStatSelectHandler}
-        >
-            <option value="">-- Выберите привычку --</option>
-            {#each habitsWithAmount as habit}
-                <option value={habit.id}>{habit.title}</option>
-            {/each}
-        </Select>
-        <BarChart
-            data={{
-                labels: selectedHabitForStats?.actions.map((a) => format(a.date, "dd.MM.yyyy")),
-                datasets: [
-                    {
-                        label: `Выполнено (${selectedHabitForStats?.unit ?? "ед"})`,
-                        data: selectedHabitForStats?.actions.map((a) => a.value ?? 0) ?? [],
-                    },
-                ],
-            }}
-            line={selectedHabitForStats?.targetValue ?? 0}
-        />
     </div>
-    <LinkButton
-        icon={Store2FillBuildings}
-        on:click={() => {
-            storeModal.open()
-        }}
+{:else}
+    <Button
+        on:click={() => createHabitModal.open()}
+        class="w-full sticky top-4 inset-x-0 z-10"
+        intent="secondary"
     >
-        Магазин
-    </LinkButton>
-</main>
+        <Icon icon={AddBoxFillSystem} />
+        Добавить ещё
+    </Button>
+    {#each relevantHabits as habit (habit.id)}
+        <HabitCard {habit} />
+    {/each}
+    {#if doneCount > 0}
+        <span class="text-xs text-neutral-700 w-full">
+            + {doneCount} выполненных привычек
+        </span>
+    {/if}
+{/if}
+<div class="relative">
+    <Select
+        containerClass="absolute inset-x-2 top-2 w-auto"
+        size="small"
+        on:change={habitStatSelectHandler}
+    >
+        <option value="">-- Выберите привычку --</option>
+        {#each habitsWithAmount as habit}
+            <option value={habit.id}>{habit.title}</option>
+        {/each}
+    </Select>
+    <BarChart
+        data={{
+            labels: selectedHabitForStats?.actions.map((a) => format(a.date, "dd.MM.yyyy")),
+            datasets: [
+                {
+                    label: `Выполнено (${selectedHabitForStats?.unit ?? "ед"})`,
+                    data: selectedHabitForStats?.actions.map((a) => a.value ?? 0) ?? [],
+                },
+            ],
+        }}
+        line={selectedHabitForStats?.targetValue ?? 0}
+    />
+</div>
+<LinkButton
+    icon={Store2FillBuildings}
+    on:click={() => {
+        storeModal.open()
+    }}
+>
+    Магазин
+</LinkButton>
 
 <Modal
     title="Добавить привычку"
