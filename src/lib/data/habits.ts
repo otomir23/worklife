@@ -53,13 +53,13 @@ export function getHabits(): Habit[] {
             const currentAction = h.actions.find((a) => a.date > h.startedDate)
 
             // If there is no action after the period start, then the habit was not done, so we reset the streak
-            if (!currentAction) resetStreak()
+            const shouldReset = currentAction ? false : resetStreak()
 
             return {
                 ...h,
                 currentValue: h.targetValue ? 0 : undefined,
                 startedDate: getPeriodBeginning(h.period, today),
-                streak: currentAction ? h.streak : 0,
+                streak: shouldReset ? 0 : h.streak,
             }
         })
     } catch (e) {

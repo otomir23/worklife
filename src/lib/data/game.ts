@@ -2,6 +2,7 @@ import { writable } from "svelte/store"
 import { z } from "zod"
 import { PauseCircleFillMedia, SpeedFillMedia } from "svelte-remix"
 import type { ComponentType } from "svelte"
+import { toast } from "$lib/data/toaster"
 
 const gameStorageKey = "game"
 
@@ -57,12 +58,18 @@ export function resetStreak() {
     const newGame = getGame()
 
     const isFrozen = newGame.frozenUntil && newGame.frozenUntil > new Date()
-    if (isFrozen) return
+    if (isFrozen) {
+        toast("Вы не выполнили привычку, но ваш стрик не сброшен из-за заморозки.")
+        return false
+    }
+    toast("Вы не выполнили привычку, стрик был сброшен.")
 
     saveGame({
         ...newGame,
         streak: 0,
     })
+
+    return true
 }
 
 export type StoreItem = {
