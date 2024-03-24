@@ -1,38 +1,42 @@
-# create-svelte
+# worklife
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/main/packages/create-svelte).
+`worklife` is a web app that helps you track your habits to improve your work-life balance.
 
-## Creating a project
+- Made with [SvelteKit](https://kit.svelte.dev) and [Tailwind CSS](https://tailwindcss.com).
+- Hosted on [Vercel](https://vercel.com).
+- Supports offline usage with service workers and is installable as a PWA.
+- Uses localStorage to store user data.
 
-If you're seeing this, you've probably already done this step. Congrats!
+## Features
 
-```bash
-# create a new project in the current directory
-npm create svelte@latest
+- Create habits from scratch or using templates.
+- Track your habits daily, weekly, or monthly.
+- Create habits with quantifiable targets.
+- Assign categories to habits for better organization. (Some categories have special icons.)
+- View your progress on quantifiable habits with a chart.
+- Delete habits you no longer need or archive them to keep them in your stats.
+- Import habits from a JSON file.
+- Motivate yourself with completion streaks (per habit and overall).
+- Earn experience points for completing habits and level up.
+- Earn coins for leveling up and spend them on special rewards in the store.
+- Install the app on your device and use it offline.
 
-# create a new project in my-app
-npm create svelte@latest my-app
-```
+## Production deployment
 
-## Developing
+You can check out the production deployment [here](https://prod.otomir23.me/).
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+## Local development
 
-```bash
-npm run dev
+### Setup
+- Clone the repo and install dependencies using [`pnpm`](https://pnpm.io).
+  ```bash
+  git clone https://github.com/Central-University-IT-prod/frontend-otomir23
+  pnpm install
+  ```
 
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
+### Scripts
 
-## Building
-
-To create a production version of your app:
-
-```bash
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+- `dev`: Starts the development server.
+- `build`: Builds the app for production.
+- `preview`: Serves the production build locally.
+- `lint`: Runs ESLint.
