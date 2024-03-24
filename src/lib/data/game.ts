@@ -1,6 +1,6 @@
 import { writable } from "svelte/store"
 import { z } from "zod"
-import { PauseCircleFillMedia, SpeedFillMedia } from "svelte-remix"
+import { PauseCircleFillMedia, SparklingFillWeather, SpeedFillMedia } from "svelte-remix"
 import type { ComponentType } from "svelte"
 import { toast } from "$lib/data/toaster"
 
@@ -17,6 +17,7 @@ export const gameSchema = z.object({
     boostUntil: z.coerce.date().optional(),
     frozenUntil: z.coerce.date().optional(),
     streak: z.number().default(0),
+    necoArc: z.number().default(0),
 })
 export type Game = z.infer<typeof gameSchema>
 
@@ -83,7 +84,7 @@ export type StoreItem = {
     name: string
     description: string
     price: number
-    purchase: () => Partial<Game>
+    purchase: (prev: Game) => Partial<Game>
 }
 
 export function purchaseItem(item: StoreItem) {
@@ -93,7 +94,7 @@ export function purchaseItem(item: StoreItem) {
 
     saveGame({
         ...newGame,
-        ...item.purchase(),
+        ...item.purchase(newGame),
         money: newGame.money - item.price,
     })
 
@@ -115,5 +116,12 @@ export const storeItems: StoreItem[] = [
         description: "Удваивает опыт за выполненные привычки. Активируется на 3 дня.",
         price: 80,
         purchase: () => ({ boostUntil: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000) }),
+    },
+    {
+        icon: SparklingFillWeather,
+        name: "неко арк",
+        description: "Добавляет одну неко арк в ваш интерфейс.",
+        price: 250,
+        purchase: (game) => ({ necoArc: game.necoArc + 1 }),
     },
 ]

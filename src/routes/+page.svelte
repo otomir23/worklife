@@ -10,6 +10,7 @@
     import Modal from "$lib/components/modal.svelte"
     import BarChart from "$lib/components/bar-chart.svelte"
     import HabitCard from "$lib/components/habit.svelte"
+    import neco from "$lib/assets/neco.png"
     import { onMount } from "svelte"
     import {
         AddBoxFillSystem,
@@ -336,3 +337,11 @@
         </div>
     {/each}
 </Modal>
+
+{#if $game?.necoArc}
+    <div class="flex flex-col fixed gap-2 right-2 bottom-2 w-16">
+        {#each [...Array($game.necoArc)] as _, i (i)}
+            <img src={neco} alt="Неко Арк" />
+        {/each}
+    </div>
+{/if}
