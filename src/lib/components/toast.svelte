@@ -7,8 +7,8 @@
 </script>
 
 <div
-    class="border border-neutral-200 bg-neutral-100 rounded-md px-4 py-2 flex gap-2 items-center
-    text-neutral-900 text-sm w-fit"
+    class="border border-neutral-200 bg-neutral-100 rounded-md px-4 md:py-2 flex gap-2 items-center
+    text-neutral-900 text-sm w-full md:w-fit py-3"
     transition:fly={{ y: -64 }}
 >
     <Icon icon={InformationFillSystem} size={16} />
