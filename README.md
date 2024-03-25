@@ -41,3 +41,5 @@ You can check out the production deployment [here](https://prod.otomir23.me/).
 - `build`: Builds the app for production.
 - `preview`: Serves the production build locally.
 - `lint`: Runs ESLint.
+
+> **Note**: PWA & Offline support are disabled in development mode.
