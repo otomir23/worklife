@@ -46,7 +46,7 @@ export function completeHabit() {
         newGame.experience + (isBoosted ? experiencePerHabit * 2 : experiencePerHabit)
     const levelsUp = Math.floor(newExperience / experiencePerLevel)
     const experience = newExperience % experiencePerLevel
-    const moneyReward = newGame.money + levelsUp * moneyPerLevel
+    const moneyReward = levelsUp * moneyPerLevel
 
     if (levelsUp > 0)
         toast(
@@ -57,7 +57,7 @@ export function completeHabit() {
         ...newGame,
         level: newGame.level + levelsUp,
         experience: experience,
-        money: moneyReward,
+        money: newGame.money + moneyReward,
         streak: newGame.streak + 1,
     })
 }
