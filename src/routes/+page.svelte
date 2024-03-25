@@ -1,5 +1,10 @@
 <script lang="ts">
-    import { createHabit, importData, habits, syncHabits, type Habit } from "$lib/data/habits"
+    import { createHabit, importData, habits } from "$lib/data/habits"
+    import { templates } from "$lib/data/templates"
+    import { getCategoryIcon } from "$lib/data/categories"
+    import { comparePeriods, getPeriodName, habitPeriodSchema } from "$lib/data/periods"
+    import { experiencePerLevel, game } from "$lib/data/game"
+    import { toast } from "$lib/data/toaster"
     import Button from "$lib/components/button.svelte"
     import LinkButton from "$lib/components/link-button.svelte"
     import Field from "$lib/components/field.svelte"
@@ -8,28 +13,17 @@
     import Tabs from "$lib/components/tabs.svelte"
     import Icon from "$lib/components/icon.svelte"
     import Modal from "$lib/components/modal.svelte"
-    import BarChart from "$lib/components/bar-chart.svelte"
     import HabitCard from "$lib/components/habit.svelte"
-    import neco from "$lib/assets/neco.png"
-    import { onMount } from "svelte"
     import {
         AddBoxFillSystem,
-        CopperCoinFillFinance,
         FileList3FillDocument,
         FireFillWeather,
         Forbid2LineSystem,
         PauseCircleFillMedia,
         SpeedFillMedia,
-        Store2FillBuildings,
         UploadCloud2FillSystem,
         ZzzFillHealthMedical,
     } from "svelte-remix"
-    import { templates } from "$lib/data/templates"
-    import { getCategoryIcon } from "$lib/data/categories"
-    import { comparePeriods, getPeriodName, habitPeriodSchema } from "$lib/data/periods"
-    import { experiencePerLevel, game, purchaseItem, storeItems, syncGame } from "$lib/data/game"
-    import { format } from "date-fns"
-    import { toast } from "$lib/data/toaster"
 
     let taskHasAmount: boolean
 
@@ -49,28 +43,14 @@
         input.value = ""
     }
 
-    function habitStatSelectHandler(e: Event) {
-        selectedHabitForStats =
-            $habits?.find((h) => h.id === +(e.target as HTMLSelectElement).value) ?? null
-    }
-
     let createHabitModal: Modal
     let habitTemplatesModal: Modal
-    let storeModal: Modal
 
     $: relevantHabits =
         $habits
             ?.filter((h) => !h.actions.find((a) => a.date > h.startedDate) && !h.archivedDate)
             .sort((a, b) => comparePeriods(a.period, b.period)) ?? null
     $: doneCount = ($habits?.length ?? 0) - (relevantHabits?.length ?? 0)
-
-    $: habitsWithAmount = $habits?.filter((h) => !!h.targetValue) ?? []
-    let selectedHabitForStats: Habit | null = null
-
-    onMount(() => {
-        syncGame()
-        syncHabits()
-    })
 </script>
 
 {#if $game === null}
@@ -177,38 +157,6 @@
         </span>
     {/if}
 {/if}
-<div class="relative">
-    <Select
-        containerClass="absolute inset-x-2 top-2 w-auto"
-        size="small"
-        on:change={habitStatSelectHandler}
-    >
-        <option value="">-- Выберите привычку --</option>
-        {#each habitsWithAmount as habit}
-            <option value={habit.id}>{habit.title}</option>
-        {/each}
-    </Select>
-    <BarChart
-        data={{
-            labels: selectedHabitForStats?.actions.map((a) => format(a.date, "dd.MM.yyyy")),
-            datasets: [
-                {
-                    label: `Выполнено (${selectedHabitForStats?.unit ?? "ед"})`,
-                    data: selectedHabitForStats?.actions.map((a) => a.value ?? 0) ?? [],
-                },
-            ],
-        }}
-        line={selectedHabitForStats?.targetValue ?? 0}
-    />
-</div>
-<LinkButton
-    icon={Store2FillBuildings}
-    on:click={() => {
-        storeModal.open()
-    }}
->
-    Магазин
-</LinkButton>
 
 <Modal
     title="Добавить привычку"
@@ -305,45 +253,3 @@
         </div>
     {/each}
 </Modal>
-
-<Modal title="Магазин" bind:this={storeModal}>
-    <div class="flex gap-1 items-center">
-        <span class="font-semibold">Баланс:</span>
-        {#if $game === null}
-            <div class="bg-neutral-200 animate-pulse h-4 w-12 rounded" />
-        {:else}
-            <Icon icon={CopperCoinFillFinance} size={16} />
-            <span>{$game.money}</span>
-        {/if}
-    </div>
-    {#each storeItems as item}
-        <div class="border border-neutral-200 flex flex-col gap-2 p-4 rounded-lg">
-            <Icon icon={item.icon} />
-            <h3 class="font-bold">{item.name}</h3>
-            <p>{item.description}</p>
-            <Button
-                size="small"
-                class="w-full gap-1"
-                type="button"
-                on:click={() => {
-                    const res = purchaseItem(item)
-                    if (!res) toast("Недостаточно средств")
-                    else storeModal.close()
-                }}
-            >
-                Купить за {item.price}
-                <Icon icon={CopperCoinFillFinance} size={16} />
-            </Button>
-        </div>
-    {/each}
-</Modal>
-
-{#if $game?.necoArc}
-    <div
-        class="flex flex-col fixed gap-2 right-2 bottom-2 w-16 pointer-events-none max-md:opacity-50"
-    >
-        {#each [...Array($game.necoArc)] as _, i (i)}
-            <img src={neco} alt="Неко Арк" />
-        {/each}
-    </div>
-{/if}
