@@ -20,6 +20,7 @@
 - Earn experience points for completing habits and level up.
 - Earn coins for leveling up and spend them on special rewards in the store.
 - Install the app on your device and use it offline.
+- Receive notifications to remind you to track your habits.
 
 ## Production deployment
 

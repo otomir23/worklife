@@ -3,9 +3,16 @@
     import { pwaInfo } from "virtual:pwa-info"
     import { pwaAssetsHead } from "virtual:pwa-assets/head"
     import { onMount } from "svelte"
+    import { scheduleNextNotification } from "$lib/data/notifications"
     import Toaster from "$lib/components/toaster.svelte"
 
     onMount(async () => {
+        Notification.requestPermission().then((result) => {
+            if (result === "granted") {
+                scheduleNextNotification()
+            }
+        })
+
         if (pwaInfo) {
             // Dynamically importing vite-plugin-pwa virtual module because it's client only, but SvelteKit is using SSR
             const { registerSW } = await import("virtual:pwa-register")
