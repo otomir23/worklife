@@ -3,6 +3,7 @@ import { z } from "zod"
 import { PauseCircleFillMedia, SparklingFillWeather, SpeedFillMedia } from "svelte-remix"
 import type { ComponentType } from "svelte"
 import { toast } from "$lib/data/toaster"
+import { now } from "$lib/data/time-travel"
 
 const gameStorageKey = "game"
 
@@ -40,7 +41,7 @@ export function syncGame() {
 export function completeHabit() {
     const newGame = getGame()
 
-    const isBoosted = newGame.boostUntil && newGame.boostUntil > new Date()
+    const isBoosted = newGame.boostUntil && newGame.boostUntil > now()
     const newExperience =
         newGame.experience + (isBoosted ? experiencePerHabit * 2 : experiencePerHabit)
     const levelsUp = Math.floor(newExperience / experiencePerLevel)
@@ -64,7 +65,7 @@ export function completeHabit() {
 export function resetStreak() {
     const newGame = getGame()
 
-    const isFrozen = newGame.frozenUntil && newGame.frozenUntil > new Date()
+    const isFrozen = newGame.frozenUntil && newGame.frozenUntil > now()
     if (isFrozen) {
         toast("Вы не выполнили привычку, но ваш стрик не сброшен из-за заморозки.")
         return false
@@ -108,14 +109,14 @@ export const storeItems: StoreItem[] = [
         description:
             "Ваш стрик не будет сбрасываться, если вы не выполните привычку. Активируется на 1 день.",
         price: 150,
-        purchase: () => ({ frozenUntil: new Date(Date.now() + 24 * 60 * 60 * 1000) }),
+        purchase: () => ({ frozenUntil: new Date(now().getTime() + 24 * 60 * 60 * 1000) }),
     },
     {
         icon: SpeedFillMedia,
         name: "Бустер",
         description: "Удваивает опыт за выполненные привычки. Активируется на 3 дня.",
         price: 80,
-        purchase: () => ({ boostUntil: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000) }),
+        purchase: () => ({ boostUntil: new Date(now().getTime() + 3 * 24 * 60 * 60 * 1000) }),
     },
     {
         icon: SparklingFillWeather,

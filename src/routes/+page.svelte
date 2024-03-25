@@ -19,11 +19,13 @@
         FileList3FillDocument,
         FireFillWeather,
         Forbid2LineSystem,
+        HourglassFillSystem,
         PauseCircleFillMedia,
         SpeedFillMedia,
         UploadCloud2FillSystem,
         ZzzFillHealthMedical,
     } from "svelte-remix"
+    import { currentDateTime, timeTravelTo } from "$lib/data/time-travel"
 
     let taskHasAmount: boolean
 
@@ -43,8 +45,13 @@
         input.value = ""
     }
 
+    function onTimeTravel(e: Event) {
+        timeTravelTo(new Date((e.target as HTMLInputElement).value))
+    }
+
     let createHabitModal: Modal
     let habitTemplatesModal: Modal
+    let timeTravelModal: Modal
 
     $: relevantHabits =
         $habits
@@ -158,6 +165,10 @@
     {/if}
 {/if}
 
+<LinkButton icon={HourglassFillSystem} on:click={() => timeTravelModal.open()}>
+    Машина времени
+</LinkButton>
+
 <Modal
     title="Добавить привычку"
     bind:this={createHabitModal}
@@ -252,4 +263,12 @@
             {/each}
         </div>
     {/each}
+</Modal>
+
+<Modal title="Машина времени" bind:this={timeTravelModal}>
+    Это секретный девтул для изменения текущей даты и времени.
+    <Field label="Текущее время">
+        <Input type="datetime-local" on:change={onTimeTravel} />
+    </Field>
+    Текущее время: {$currentDateTime?.toLocaleString()}
 </Modal>

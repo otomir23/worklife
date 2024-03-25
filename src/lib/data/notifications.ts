@@ -1,3 +1,5 @@
+import { now } from "$lib/data/time-travel"
+
 export type Notification = {
     title: string
     body: string
@@ -18,14 +20,15 @@ export const notifications: Notification[] = [
 ]
 
 export function scheduleNextNotification() {
-    const now = new Date()
-    const nextNotification = notifications.find((n) => n.hour > now.getHours()) ?? notifications[0]
-    const nextNotificationTime = new Date(now)
+    const today = now()
+    const nextNotification =
+        notifications.find((n) => n.hour > today.getHours()) ?? notifications[0]
+    const nextNotificationTime = new Date(today)
     nextNotificationTime.setHours(nextNotification.hour, 0, 0, 0)
-    if (nextNotificationTime < now) {
+    if (nextNotificationTime < today) {
         nextNotificationTime.setDate(nextNotificationTime.getDate() + 1)
     }
-    const msUntilNotification = nextNotificationTime.getTime() - now.getTime()
+    const msUntilNotification = nextNotificationTime.getTime() - today.getTime()
     setTimeout(() => {
         new Notification(nextNotification.title, { body: nextNotification.body })
         scheduleNextNotification()

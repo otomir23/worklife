@@ -9,6 +9,9 @@
                 text: "",
                 password: "",
                 number: "",
+                email: "",
+                date: "",
+                "datetime-local": "",
             },
         },
         defaultVariants: {
@@ -20,4 +23,4 @@
     const { class: className, type, ...rest } = $$restProps
 </script>
 
-<input class={input({ type, className })} {type} {...rest} />
+<input class={input({ type, className })} {type} {...rest} on:change />

@@ -2,6 +2,7 @@ import { z } from "zod"
 import { getPeriodBeginning, getPeriodEnd, habitPeriodSchema } from "$lib/data/periods"
 import { writable } from "svelte/store"
 import { completeHabit, resetStreak } from "$lib/data/game"
+import { now } from "$lib/data/time-travel"
 
 const habitsStorageKey = "habits"
 export const habits = writable<Habit[] | null>(null)
@@ -42,10 +43,10 @@ export function getHabits(): Habit[] {
     try {
         const rawData: unknown = JSON.parse(localStorage.getItem(habitsStorageKey) ?? "[]")
         const habits = z.array(habitSchema).parse(rawData)
+        const today = now()
 
         // Invalidate habits that are past their period end
         const newHabits = habits.map((h) => {
-            const today = new Date()
             if (today < getPeriodEnd(h.period, h.startedDate) || h.archivedDate !== undefined)
                 // Habit is still valid
                 return h
@@ -78,7 +79,7 @@ export type HabitCreation = Omit<ImportedHabit, "id" | "addDate">
 export function createHabit(habit: HabitCreation) {
     const oldHabits = getHabits()
     const maxId = Math.max(...oldHabits.map((h) => h.id), 0)
-    const today = new Date()
+    const today = now()
     const newHabits: Habit[] = [
         ...oldHabits,
         {
@@ -104,16 +105,16 @@ export function archiveHabit(id: number) {
         if (h.id !== id) return h
         return {
             ...h,
-            archivedDate: new Date(),
+            archivedDate: now(),
         }
     })
     saveHabits(newHabits)
 }
 
 export function updateHabitProgress(id: number, progress: number) {
+    const today = now()
     const newHabits = getHabits().map((h) => {
         if (h.id !== id || progress === 0) return h
-        const today = new Date()
         if (h.targetValue && progress < h.targetValue) {
             return {
                 ...h,
@@ -146,9 +147,10 @@ export const importSchema = z.object({
 export function importData(data: string) {
     try {
         const parsed = importSchema.parse(JSON.parse(data))
+        const today = now()
         const newHabits = parsed.habits.map((h) => {
             const actions = parsed.actions.filter((a) => a.id === h.id)
-            const currentPeriodBeginning = getPeriodBeginning(h.period, new Date())
+            const currentPeriodBeginning = getPeriodBeginning(h.period, today)
             return {
                 ...h,
                 actions,

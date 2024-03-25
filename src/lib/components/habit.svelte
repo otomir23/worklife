@@ -1,11 +1,12 @@
 <script lang="ts">
     import Icon from "$lib/components/icon.svelte"
     import { archiveHabit, type Habit, removeHabit, updateHabitProgress } from "$lib/data/habits"
-    import { formatDistanceToNowStrict } from "date-fns"
+    import { formatDistanceStrict } from "date-fns"
     import { ru as ruDateLocale } from "date-fns/locale/ru"
     import { ArchiveFillBusiness, DeleteBinFillSystem, FireFillWeather } from "svelte-remix"
     import { getCategoryIcon } from "$lib/data/categories"
     import { getPeriodEnd } from "$lib/data/periods"
+    import { currentDateTime } from "$lib/data/time-travel"
 
     function handleChecked(e: Event) {
         if ((e.target as HTMLInputElement).checked) updateHabitProgress(habit.id, 1)
@@ -26,9 +27,13 @@
         <span class="font-bold">{habit.title}</span>
         <span class="text-xs text-neutral-700">
             осталось
-            {formatDistanceToNowStrict(getPeriodEnd(habit.period, habit.startedDate), {
-                locale: ruDateLocale,
-            })}
+            {formatDistanceStrict(
+                getPeriodEnd(habit.period, habit.startedDate),
+                $currentDateTime ?? new Date(),
+                {
+                    locale: ruDateLocale,
+                },
+            )}
         </span>
         <div class="flex gap-0.5 text-xs items-center">
             <Icon icon={getCategoryIcon(habit.category)} size={12} />
