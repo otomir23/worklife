@@ -36,6 +36,7 @@
                 immediate: true,
                 onRegisteredSW(_, r) {
                     if (r) {
+                        r.update()
                         setInterval(
                             () => {
                                 console.log("Checking for worker update")
