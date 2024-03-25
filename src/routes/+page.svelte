@@ -339,7 +339,9 @@
 </Modal>
 
 {#if $game?.necoArc}
-    <div class="flex flex-col fixed gap-2 right-2 bottom-2 w-16">
+    <div
+        class="flex flex-col fixed gap-2 right-2 bottom-2 w-16 pointer-events-none max-md:opacity-50"
+    >
         {#each [...Array($game.necoArc)] as _, i (i)}
             <img src={neco} alt="Неко Арк" />
         {/each}
