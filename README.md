@@ -3,7 +3,7 @@
 `worklife` is a web app that helps you track your habits to improve your work-life balance.
 
 - Made with [SvelteKit](https://kit.svelte.dev) and [Tailwind CSS](https://tailwindcss.com).
-- Hosted on [Vercel](https://vercel.com).
+- Hosted on [Cloudflare Workers](https://cloudflare.com/workers).
 - Supports offline usage with service workers and is installable as a PWA.
 - Uses localStorage to store user data.
 
@@ -24,14 +24,14 @@
 
 ## Production deployment
 
-You can check out the production deployment [here](https://prod.otomir23.me/).
+You can check out the production deployment [here](https://prod24.otomir23.me/).
 
 ## Local development
 
 ### Setup
 - Clone the repo and install dependencies using [`pnpm`](https://pnpm.io).
   ```bash
-  git clone https://github.com/Central-University-IT-prod/frontend-otomir23
+  git clone https://github.com/otomir23/worklife
   pnpm install
   ```
 

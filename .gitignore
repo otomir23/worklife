@@ -12,4 +12,4 @@ vite.config.ts.timestamp-*
 .vscode
 .fleet
 /dev-dist
-/.vercel
+/.wrangler
